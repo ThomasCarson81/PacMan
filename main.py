@@ -9,7 +9,7 @@ pg.display.set_caption("Pac-Man")
 clock = pg.time.Clock()
 import sprites
 
-map_img: pg.Surface = pg.transform.scale2x(pg.image.load("sprites/map/map_empty.png").convert_alpha())
+map_img: pg.Surface = pg.image.load("sprites/map/map_empty_square_double.png").convert_alpha()
 map_rects: list[pg.Rect] = []
 
 class Direction(Enum):
@@ -68,7 +68,7 @@ class Pacman:
 				self.direction = Direction.RIGHT
 				self.queue.clear()
 		else:
-			if len(self.queue) > 0 and self.check_for_map_collisions(self.queue[0]):
+			if len(self.queue) > 0 and not self.check_for_map_collisions(self.queue[0]):
 				self.direction = self.queue.pop(0)
 
 	def animate(self) -> None:
@@ -105,7 +105,7 @@ class Pacman:
 		if self.rect.y > HEIGHT:
 			self.rect.y = 0
 
-	def  check_for_map_collisions(self, direction: Direction) -> bool:
+	def check_for_map_collisions(self, direction: Direction) -> bool:
 		map_colour = pg.Color(33, 33, 255)
 		match direction:
 			case Direction.UP:
@@ -120,24 +120,27 @@ class Pacman:
 			case Direction.RIGHT:
 				axis = 0
 				offset = 1
-		buffer = 0
+		buffer = -2
+		buffer2 = 2
 		if axis == 0:
 			x = int(self.rect.centerx + (offset * (3+self.rect.width/2)))
 			for i in range(self.rect.top+buffer, self.rect.bottom-buffer):
-				try:
-					if screen.get_at([x, i]) == map_colour:
-						return True
-				except:
-					return False
+				for j in range(x-buffer2, x+buffer2):
+					try:
+						if screen.get_at([j, i]) == map_colour:
+							return True
+					except:
+						return False
 			return False
 		elif axis == 1:
 			y = int(self.rect.centery + (offset * (3+self.rect.height/2)))
 			for i in range(self.rect.left+buffer, self.rect.right-buffer):
-				try:
-					if screen.get_at([i, y]) == map_colour:
-						return True
-				except:
-					return False
+				for j in range(y-buffer2, y+buffer2):
+					try:
+						if screen.get_at([i, j]) == map_colour:
+							return True
+					except:
+						return False
 			return False
 
 	def update(self) -> None:
