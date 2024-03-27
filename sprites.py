@@ -1,5 +1,6 @@
 import pygame as pg
 from enum import Enum
+map_img: pg.Surface = pg.image.load("sprites/map/map_empty_square_double.png").convert_alpha()
 class Pacman:
     UP: list[pg.Surface] = [
         pg.transform.scale2x(pg.image.load("sprites/pacman/run/up_0.png").convert_alpha()),
