@@ -34,3 +34,9 @@ class PacmanDeath:
 class PacmanAnimation(Enum):
     RUN = 0
     DEATH = 1
+class GhostAnimation(Enum):
+    CHASE = 0
+    FLEE = 1
+    DEAD = 2
+class Blinky:
+    sprite = pg.transform.scale(pg.image.load("sprites/ghosts/blinky/blinky_right_0.png"), (21, 21))
